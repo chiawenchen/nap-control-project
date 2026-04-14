@@ -39,6 +39,21 @@ const {
 
 const baseUrl = import.meta.env.BASE_URL;
 const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+const faviconUrl = prefix + favicon;
+
+const faviconTypeByExtension: Record<string, string> = {
+  svg: "image/svg+xml",
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  ico: "image/x-icon",
+  webp: "image/webp",
+};
+
+const faviconExtension = favicon.split(".").pop()?.toLowerCase() ?? "";
+const faviconType = faviconTypeByExtension[faviconExtension];
+
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <!doctype html>
@@ -49,7 +64,8 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
 
-    <link rel="icon" type="image/svg+xml" href={prefix + favicon} />
+    <link rel="icon" href={faviconUrl} type={faviconType} />
+    <link rel="shortcut icon" href={faviconUrl} />
 
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
@@ -62,12 +78,33 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     />
 
     <title>{title}</title>
+
+    {
+      gaMeasurementId && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+          />
+          <script define:vars={{ gaMeasurementId }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", gaMeasurementId);
+          </script>
+        </>
+      )
+    }
   </head>
   <body
     class="prose prose-lg prose-zinc dark:prose-invert prose-a:text-blue-500 prose-a:dark:text-blue-300 prose-a:no-underline prose-a:hover:underline prose-a:font-normal prose-code:bg-zinc-200 prose-code:dark:bg-zinc-800 prose-code:text-zinc-800 prose-code:dark:text-zinc-200 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-medium prose-code:before:content-none prose-code:after:content-none max-w-none pt-16 pb-6 font-(family-name:--font-noto-sans)"
   >
-    <header class="mx-auto mb-12 max-w-[50rem] px-6 text-center">
-      <h1 class="text-5xl font-medium">{title}</h1>
+    <header class="mx-auto mb-12 max-w-[64rem] px-6 text-center">
+      <h1 class="text-4xl leading-tight font-medium text-zinc-700 dark:text-zinc-200 sm:text-5xl">
+        {title}
+      </h1>
       <div class="flex flex-col items-center gap-6">
         <Authors authors={authors} />
         {conference && <div>{conference}</div>}
@@ -80,10 +117,16 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     </main>
     <footer class="mx-auto max-w-[50rem] px-6 text-center">
       <p class="prose-sm text-center">
-        Built with <a
+        This website was built using <a
           href="https://research-template.roman.technology"
-          rel="nofollow">Roman Hauksson-Neill's project page template</a
-        >
+          rel="nofollow">Roman Hauksson-Neill's template</a
+        > (based on <a
+          href="https://nerfies.github.io/"
+          rel="nofollow">Nerfies</a
+        >) and is licensed under <a
+          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          rel="nofollow">Creative Commons Attribution-ShareAlike 4.0 International License</a
+        >.
       </p>
     </footer>
   </body>

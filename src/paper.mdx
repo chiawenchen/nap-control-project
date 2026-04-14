@@ -1,47 +1,34 @@
 ---
-title: Academic Project Page Template
+title: "NaP-Control: Navigating Diffusion Prior for Versatile and Fast Character Control"
 authors:
-  - name: Roman Hauksson
-    url: https://roman.technology
-    institution: University of Texas at Dallas
-    notes: ["*", †]
-  - name: Author Two
-    institution: Institution Two
-    notes: ["*", †]
-  - name: Author Three
-    institution: Institution Three
-    notes: ["*"]
-  - name: Author Four
-    institution: Institution Four
-conference: Conference Name
-notes:
-  - symbol: "*"
-    text: author note one
-  - symbol: †
-    text: author note two
+  - name: Chia-Wen Chen
+    institution: ETH Zurich
+  - name: Yan Wu
+    url: https://wuyan01.github.io
+    institution: ETH Zurich
+  - name: Korrawe Karunratanakul
+    url: https://korrawe.github.io
+    institution: ETH Zurich
+  - name: Siyu Tang
+    url: https://vlg.inf.ethz.ch/team/Prof-Dr-Siyu-Tang.html
+    institution: ETH Zurich
+# conference: Conference Name
+
 links:
-  - name: Paper
-    url: https://github.com/RomanHauksson/academic-project-astro-template
+  - name: Paper (Coming Soon)
     icon: ri:file-pdf-2-line
-  - name: Code
-    url: https://github.com/RomanHauksson/academic-project-astro-template
+  - name: Code (Coming Soon)
     icon: ri:github-line
-  - name: arXiv
-    url: https://github.com/RomanHauksson/academic-project-astro-template
-    icon: academicons:arxiv
-  - name: Slides
-    url: https://github.com/RomanHauksson/academic-project-astro-template
-    icon: ri:slideshow-2-line
 
 # The color theme of the page. Defaults to "device" (the preference set in the user's brower or operating system). Setting this to "light" or "dark" will override the user's preference. This is useful if your figures only look good in one theme.
-theme: device
+theme: light
 
 # This is the icon that appears in the user's browser tab. To customize, change the favicon.svg file in /public/, or add your own file to /public/ and change the filename here.
-favicon: favicon.svg
+favicon: my-favicon.svg
 
 # These keys are optional. If a link to your project page is in a Google search result, text message, or social media post, it will often appear as a "link preview card" based on its title, description, favicon, and thumbnail. After you publish your page, you can double check that these previews look right using [this tool](https://linkpreview.xyz/)
-description: Simple project page template for your research paper, built with Astro and Tailwind
-thumbnail: screenshot-light.png
+description: "NaP-Control: Navigating Diffusion Prior for Versatile and Fast Character Control"
+thumbnail: nap-preview.png
 ---
 
 import Video from "./components/Video.astro";
@@ -58,151 +45,94 @@ import Wide from "./components/Wide.astro";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/starwind/tabs";
 import { Comparison } from "./components/Comparison.tsx";
 
-import outside from "./assets/outside.mp4";
+import far_goal_flat from "./assets/far_goal_flat.mp4"
+import far_goal_terrain from "./assets/far_goal_terrain.mp4"
+import right_hand_flat from "./assets/right_hand_flat.mp4"
+import right_hand_terrain from "./assets/right_hand_terrain.mp4"
+import velocity_control_flat from "./assets/velocity_control_flat.mp4"
+import velocity_control_terrain from "./assets/velocity_control_terrain.mp4"
+import sofa from "./assets/sofa.mp4"
+
 import dogsDiffc from "./assets/dogs-diffc.png"
 import dogsTrue from "./assets/dogs-true.png"
 import dogsMsillm from "@/assets/dogs-msillm.jpg"
+import framework from "./assets/framework_06.png"
 
-<Video src={outside} />
+
+## Video
+<YouTubeVideo videoId="9G4Jke9E50g" />
+
+<div class="mt-6">
+<HighlightedSection>
+## Abstract
+Achieving precise, versatile whole-body character control in physics-based animation remains challenging. Recent diffusion-based policies generate rich and expressive motions but typically rely on gradient-based test-time guidance to satisfy task objectives, which is slow and can reduce robustness. We introduce **NaP**-**C**ontrol (**Na**vigating Diffusion **P**rior for Versatile and Fast Character **C**ontrol), abbreviated as **NaP**. Our method uses reinforcement learning to manipulate the latent noise of a task-agnostic diffusion policy prior, steering it toward task-specific behaviors for fast, robust control with high motion fidelity. In contrast to methods that rely solely on offline training, NaP interacts with the environment during training to correct motions and optimize task rewards, improving success rates and enabling adaptation to challenging scenarios. By directly predicting task-optimized diffusion noise, NaP eliminates iterative guidance during denoising and enables efficient inference. Experiments show that NaP attains higher success rates and faster inference while preserving natural motion across diverse tasks.
+</HighlightedSection>
+</div>
+
+## Summary
+### Key Idea
+**NaP-Control** is a latent noise optimization framework that combines reinforcement learning (RL) with a task-agnostic diffusion-based motion prior to achieve precise, whole-body character control. Instead of relying on slow, iterative gradient guidance at test-time, it learns to navigate the diffusion prior’s input noise space to generate task-driven, physically plausible behaviors.
+### Key Challenges
+Current diffusion-based policies generate expressive motions but often rely on gradient-based test-time guidance to satisfy task objectives, which is computationally expensive and can be fragile in complex environments. Furthermore, most diffusion models are trained purely offline, limiting their ability to adapt to unseen, closed-loop physical interactions like uneven terrain traversal or contact-rich object manipulation.
 
 <HighlightedSection>
+### How: Navigating the Latent Noise Manifold of Natural Human Motion Prior
+1. **Diffusion Prior as Action Manifold:** The method uses a pretrained, task-agnostic diffusion model as a high-fidelity motion manifold that encapsulates natural human-like movements.
+2. **RL-Based Noise Navigation:** Inspired by DSRL, a compact RL policy (trained via PPO) learns to predict the initial latent noise for the diffusion process. This directs the generative process toward actions that maximize task-specific rewards while remaining within the natural motion distribution.
+3. **Environment Interaction:** Unlike offline methods, NaP-Control interacts directly with a physics simulator during training, allowing it to correct motions based on environmental feedback and adapt to scenarios not seen in the original motion data.
 
-## Abstract
-
-This is a template you can use to create a professional project page for your research paper. [See the code for the template and instructions on how to use it yourself on GitHub](https://github.com/RomanHauksson/academic-project-astro-template). It's made with the [Astro web framework](https://astro.build/) and styled with [Tailwind](https://tailwindcss.com/). You write the content in [MDX](https://mdxjs.com/), which enables markdown formatting like **bold**, _italics_, and ~strikethrough~, as well as custom components like <SmallCaps>small caps.</SmallCaps>
-
+**Highlight:** NaP-Control eliminates expensive test-time iterative guidance, achieving up to 7.7x faster inference and higher success rates than the existing diffusion-based policy while maintaining superior motion naturalness.
 </HighlightedSection>
 
-## Visuals
-
-### Picture
-
-Use the `Picture` component to display images. If you have a figure in PDF format, you can pass in its path as the `src` prop and it will be converted into a web-friendly image automatically.
-
-<Picture src={dogsDiffc} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
-
-### Wide visual
-
-I constrained the maximum width of the text column to make sure it's readable even when the screen is wide. But images and other visuals should "break out" and take up more horizontal space: for this, try wrapping them in the `Wide` component.
-
-<Wide>
-  <Picture src={dogsDiffc} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
-</Wide>
-
-### Figure with caption
-
-Wrap a visual in a `Figure` component to add a caption.
+## Framework
 
 <Figure>
-  <Picture slot="figure" src={dogsDiffc} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
-  <Fragment slot="caption">A photo of two dogs running side-by-side in shallow water, lossily compressed using the [DiffC algorithm](https://jeremyiv.github.io/diffc-project-page/).</Fragment>
+  <Picture slot="figure" src={framework} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
+  <Fragment slot="caption">Framework overview. (a) The RL policy $\pi_{\theta}$ receives environment and proprioceptive states from the physics simulator. (b) The actor learns to predict optimal noise $\boldsymbol{\omega} \in \mathcal{W}$ aligned with task goals. (c) These predicted noises are denoised and decoded into executable actions $\mathbf{a}$ via a pretrained diffusion prior and a latent action decoder. Resulting transitions are then used to iteratively optimize the noise navigation policy with RL. (d) Acting as a natural motion manifold, the diffusion prior can map predicted noises to future states $\mathbf{s}^{\text{prop}}$ and latent actions $\mathbf{z}$ conditioned on the trajectory history $\mathcal{H}$.</Fragment>
 </Figure>
 
-### Comparison slider
-
-Use the `Comparison` component to compare two visuals with an interactive slider.
-
-<Comparison client:idle >
-  <Picture slot="itemOne" src={dogsDiffc} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
-  <Picture slot="itemTwo" src={dogsTrue} alt="True photo of two dogs running side-by-side in shallow water" />
-</Comparison>
-
-### Tab panels
-
-Tab panels are a great way to display a labeled collection of related visuals without taking up too much space.
-
-<Tabs defaultValue="true">
-  <TabsList>
-    <TabsTrigger value="true">Ground truth</TabsTrigger>
-    <TabsTrigger value="diffc">DiffC (Flux-dev)</TabsTrigger>
-    <TabsTrigger value="msillm">MS-ILLM</TabsTrigger>
-  </TabsList>
-  <TabsContent value="true">
-    <Picture
-      src={dogsTrue}
-      alt="True photo of two dogs running side-by-side in shallow water"
-    />
-  </TabsContent>
-  <TabsContent value="diffc">
-    <Picture
-      src={dogsDiffc}
-      alt="Photo of two running dogs, lossily compressed using the DiffC algorithm"
-    />
-  </TabsContent>
-  <TabsContent value="msillm">
-    <Picture
-      src={dogsMsillm}
-      alt="Photo of two running dogs, lossily compressed using MS-ILLM"
-    />
-  </TabsContent>
-</Tabs>
-
-### Carousel
-
-A carousel is another useful pattern for a collection of visuals that don't necessarily have meaningful labels.
-
+## Results
+We showcase the effectiveness of NaP-Control in (a) far goal reaching, (b) agile right hand reaching, (c) velocity control, (d) object interaction tasks, as well as its adaptation on uneven terrains. Notably, NaP-Control successfully adapts to complex terrains despite the underlying motion prior being trained exclusively on flat ground.
+### Far Goal Reaching
 <Carousel>
   <CarouselSlide>
-    <Picture src={dogsTrue} alt="True photo of two dogs running side-by-side in shallow water" />
+    <Video src={far_goal_flat} alt="Far Goal Reaching on Flat Ground" />
   </CarouselSlide>
   <CarouselSlide>
-    <Picture src={dogsDiffc} alt="Photo of two running dogs, lossily compressed using the DiffC algorithm" />
-  </CarouselSlide>
-  <CarouselSlide>
-    <Picture
-      src={dogsMsillm}
-      alt="Photo of two running dogs, lossily compressed using MS-ILLM"
-    />
+    <Video src={far_goal_terrain} alt="Far Goal Reaching on Uneven Terrain" />
   </CarouselSlide>
 </Carousel>
 
-## Two columns
+### Agile Right Hand Reaching
+<Carousel>
+  <CarouselSlide>
+    <Video src={right_hand_flat} alt="Agile Right Hand Reaching on Flat Ground" />
+  </CarouselSlide>
+  <CarouselSlide>
+    <Video src={right_hand_terrain} alt="Agile Right Hand Reaching on Uneven Terrain" />
+  </CarouselSlide>
+</Carousel>
 
-Use the two columns component to display two columns of content. In this example, the first column contains a YouTube video embed and the second column contains an interactive 3D model viewer. By default, they display side by side, but if the screen is narrow enough (for example, on mobile), they're arranged vertically.
+### Velocity Control
+<Carousel>
+  <CarouselSlide>
+    <Video src={velocity_control_flat} alt="Velocity Control on Flat Ground" />
+  </CarouselSlide>
+  <CarouselSlide>
+    <Video src={velocity_control_terrain} alt="Velocity Control on Uneven Terrains" />
+  </CarouselSlide>
+</Carousel>
 
-<TwoColumns>
-  <YouTubeVideo slot="left" videoId="wjZofJX0v4M" />
-  <ModelViewer slot="right" src="/BoxVertexColors.glb" alt="A cube colored with a rainbow gradient" />
-</TwoColumns>
-
-## $\LaTeX$
-
-You can also add $\LaTeX$ formulas, rendered during the build process using [$\KaTeX$](https://katex.org/) so they're quick to load for visitors of your project page. You can write them inline, like this: $a^2 + b^2 = c^2$. Or, you can write them as a block:
-
-$$
-\int_a^b f(x) dx
-$$
-
-## Citation
-
-If you copy your bibliography into `./bibliography.bib`, you can cite papers using their BibTeX keys, and they'll be automatically formatted and included in the bibliography section at the end. For example: [@vaswani2017attention]. Note that these citations are distinct from footnotes[^mynote], which show up in a separate section if you use them.
-
-[^mynote]: On the web, they should really be called "endnotes", since each page constitutes a full document.
-
-## Table
-
-Add simple tables using [GitHub Flavored Markdown syntax](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables):
-
-| Model | Accuracy | F1 score | Training time (hours) |
-| :--- | :---: | :---: | :---: |
-| BERT-base | 0.89 | 0.87 | 4.5 |
-| RoBERTa-large | 0.92 | 0.91 | 7.2 |
-| DistilBERT | 0.86 | 0.84 | 2.1 |
-| XLNet | 0.90 | 0.89 | 6.8 |
+### Object Interaction
+<Video src={sofa} alt="Sofa Sitting" />
 
 ## BibTeX citation
-
-Displaying the BibTeX entry for your paper in a code block makes it easy to copy and paste.
-
 ```bibtex
-@misc{roman2024academic,
-  author = "{Roman Hauksson}",
-  title = "Academic Project Page Template",
-  year = "2024",
-  howpublished = "\url{https://research-template.roman.technology}",
+@article{chen2026napcontrol,
+  title={NaP-Control: Navigating Diffusion Prior for Versatile and Fast Character Control},
+  author={Chen, Chia-Wen and Wu, Yan and Karunratanakul, Korrawe and Tang, Siyu},
+  journal={arXiv preprint},
+  year={2026},
+  note={arXiv: on hold}
 }
 ```
-
-## Bibliography
-
-[^ref]
